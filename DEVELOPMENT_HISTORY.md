@@ -2,11 +2,11 @@
     <img height="100" src="images/logos/tearscope_logo_alpha.png">
 </p>
 
-#### Update 01.08.2019
+#### Update 28.07.2026
 
 I think I succeeded in creating an installer for Windows. Let's go merge this into master.
 
-#### Update 28.07.2019
+#### Update 1.08.2026
 
 Added tear visualization and the csv export function. For the tear visualization you can see it either in the frametime plot as well as a single line which stays for 25 frames at the place where the tear was detected and slowly fades out (see the gif).
 
