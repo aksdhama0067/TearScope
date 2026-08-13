@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
-	<Name>trdrop</Name>
+	<Name>TearScope</Name>
 	<Version>1.1.1</Version>
-	<Title>Trdrop Installer</Title>
+	<Title>TearScope Installer</Title>
 	<Publisher>cirquit</Publisher>
-	<StartMenuDir>Trdrop</StartMenuDir>
-	<TargetDir>@HomeDir@/Trdrop</TargetDir>
+	<StartMenuDir>TearScope</StartMenuDir>
+	<TargetDir>@HomeDir@/TearScope</TargetDir>
 </Installer>
