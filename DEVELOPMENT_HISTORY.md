@@ -1,5 +1,5 @@
 <p align="center">
-    <img height="100" src="images/logos/tearscope_logo_alpha.png">
+    <img height="100" src="assets/Tearscope_logo.png">
 </p>
 
 #### Update 28.07.2026
