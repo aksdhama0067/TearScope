@@ -7,3 +7,4 @@
 	<StartMenuDir>TearScope</StartMenuDir>
 	<TargetDir>@HomeDir@/TearScope</TargetDir>
 </Installer>
+ 
