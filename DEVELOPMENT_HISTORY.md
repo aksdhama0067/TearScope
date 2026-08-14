@@ -6,7 +6,7 @@
 
 I think I succeeded in creating an installer for Windows. Let's go merge this into master.
 
-#### Update 1.08.2026
+#### Update 1.08.2026 
 
 Added tear visualization and the csv export function. For the tear visualization you can see it either in the frametime plot as well as a single line which stays for 25 frames at the place where the tear was detected and slowly fades out (see the gif).
 
