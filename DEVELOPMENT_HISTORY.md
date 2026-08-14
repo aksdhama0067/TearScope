@@ -199,7 +199,7 @@ This is the current progress video for the file choose dialog with ordering.
 
 ![](https://github.com/aksdhama0067/tearscope/raw/ef4462994df90fdc3b2c961a76e874a4a964a12e/images/2019-05-12-filechoose-dialog-progress.gif)
 
-#### Update 24.04.2019
+#### Update 24.04.2026
 
 I'm currently working on a cross platform (Win/Linux) Qt based implementation. Currently testing some of the key functionalities in private repos. Stay tuned!
 
