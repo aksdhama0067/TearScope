@@ -3,7 +3,7 @@
 Short writeup of Windows / Linux (Ubuntu) cross platform development information with Qt
 
 * Setup an initial repository
-* Install Qt 5.15.2
+* Install Qt 5.15.2 
 * Install CMake (Linux)
 * Install CMake (Windows)
 * Compile OpenCV 4.5.1 (Linux)
