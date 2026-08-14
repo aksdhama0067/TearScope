@@ -4,7 +4,7 @@
 </p>
 
 # TearScope - v1.1.1
-###### a raw video analysis tool
+###### a raw video analysis tool 
 
 ## What it does
 
