@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Get short SHA and set Qt + OpenCV version
         run: |
@@ -17,7 +17,7 @@ jobs:
           echo opencv_ver=4.5.1 >> $env:GITHUB_ENV
 
       - name: Cache Object files
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         id: cache1
         with:
           path: C:\build_temp
@@ -39,7 +39,7 @@ jobs:
 
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: C:\Qt
           key: ${{ runner.os }}-Qt-Cache
@@ -90,7 +90,7 @@ jobs:
           7z a -m0=LZMA2 -mx9 ..\trdrop-release-${env:SHORT_SHA}.7z
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: trdrop-release-${{ env.SHORT_SHA }}
           path: release/*
