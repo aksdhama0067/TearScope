@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Get short SHA and set Qt + OpenCV version
         run: |
@@ -17,7 +17,7 @@ jobs:
           echo opencv_ver=4.5.1 >> $env:GITHUB_ENV
 
       - name: Cache Object files
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         id: cache1
         with:
           path: C:\build_temp
@@ -33,19 +33,19 @@ jobs:
       - name: Download Precompiled OpenCV libs
         run: |
           mkdir C:\downloads
-          $opencv_ver1=${env:opencv_ver}
+          $opencv_ver1=${env:opencv_ver2}
           curl -fL https://github.com/illusion0001/opencv-build/releases/download/${opencv_ver1}/opencv-${opencv_ver1}.7z -o C:\downloads\opencv-${opencv_ver1}.7z
           7z -r x C:\downloads\opencv-${opencv_ver1}.7z -oc:\downloads\
 
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: C:\Qt
           key: ${{ runner.os }}-Qt-Cache
 
       - name: Download Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v2
         with:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           version: ${{ env.qtver }}
@@ -58,7 +58,7 @@ jobs:
           $qtver1=$env:qtver
           $opencv_ver1=${env:opencv_ver}
           echo Qt_Install="C:\Qt" >> $env:GITHUB_ENV
-          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver3}" >> $env:GITHUB_ENV
+          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver2}" >> $env:GITHUB_ENV
           echo MinGWBin="C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
 
       - name: Build Trdrop
@@ -90,7 +90,7 @@ jobs:
           7z a -m0=LZMA2 -mx9 ..\trdrop-release-${env:SHORT_SHA}.7z
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: trdrop-release-${{ env.SHORT_SHA }}
           path: release/*
