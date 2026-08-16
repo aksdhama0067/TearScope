@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Get short SHA and set Qt + OpenCV version
         run: |
@@ -17,7 +17,7 @@ jobs:
           echo opencv_ver=4.5.1 >> $env:GITHUB_ENV
 
       - name: Cache Object files
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         id: cache1
         with:
           path: C:\build_temp
@@ -39,13 +39,13 @@ jobs:
 
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: C:\Qt
           key: ${{ runner.os }}-Qt-Cache
 
       - name: Download Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           version: ${{ env.qtver }}
@@ -58,7 +58,7 @@ jobs:
           $qtver1=$env:qtver
           $opencv_ver1=${env:opencv_ver}
           echo Qt_Install="C:\Qt" >> $env:GITHUB_ENV
-          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver1}" >> $env:GITHUB_ENV
+          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver3}" >> $env:GITHUB_ENV
           echo MinGWBin="C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
 
       - name: Build Trdrop
@@ -90,7 +90,7 @@ jobs:
           7z a -m0=LZMA2 -mx9 ..\trdrop-release-${env:SHORT_SHA}.7z
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: trdrop-release-${{ env.SHORT_SHA }}
           path: release/*
