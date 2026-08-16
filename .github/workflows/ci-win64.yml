@@ -33,7 +33,7 @@ jobs:
       - name: Download Precompiled OpenCV libs
         run: |
           mkdir C:\downloads
-          $opencv_ver1=${env:opencv_ver2}
+          $opencv_ver1=${env:opencv_ver}
           curl -fL https://github.com/illusion0001/opencv-build/releases/download/${opencv_ver1}/opencv-${opencv_ver1}.7z -o C:\downloads\opencv-${opencv_ver1}.7z
           7z -r x C:\downloads\opencv-${opencv_ver1}.7z -oc:\downloads\
 
@@ -58,7 +58,7 @@ jobs:
           $qtver1=$env:qtver
           $opencv_ver1=${env:opencv_ver}
           echo Qt_Install="C:\Qt" >> $env:GITHUB_ENV
-          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver2}" >> $env:GITHUB_ENV
+          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver}" >> $env:GITHUB_ENV
           echo MinGWBin="C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
 
       - name: Build Trdrop
