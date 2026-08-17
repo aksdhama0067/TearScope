@@ -6,8 +6,8 @@
 #include <QFontDatabase>
 //#include <QQmlDebuggingEnabler>
 
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/core.hpp"
+#include "opencv2/highgui.hpp"
 
 #include "headers/qml_models/fileitemmodel.h"
 #include "headers/qml_models/generaloptionsmodel.h"
