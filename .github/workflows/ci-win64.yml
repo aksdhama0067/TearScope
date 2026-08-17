@@ -78,6 +78,11 @@ jobs:
           echo "Listing OpenCV include files..."
           Get-ChildItem -Path 'C:\downloads\opencv-4.5.1\build_64\install\include' -Recurse | Select-Object -First 200
 
+      - name: List project headers
+        run: |
+          echo "Listing TearScope headers..."
+          Get-ChildItem -Path 'TearScope\\headers' -Recurse | Select-Object -First 200
+
       - name: Build TearScope
         run: |
           qmake -o Makefile TearScope\TearScope.pro -spec win32-g++ "CONFIG+=qtquickcompiler" "OBJECTS_DIR=C:\build_temp" "MOC_DIR=C:\build_temp"
