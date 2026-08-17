@@ -45,13 +45,15 @@ jobs:
           key: ${{ runner.os }}-Qt-Cache
 
       - name: Download Qt
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v2
         with:
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: ${{ steps.cache-qt.outputs.cache-hit }}
           version: ${{ env.qtver }}
           arch: win64_mingw81
-          dir: C:\
-          tools: tools_ifw,4.1.1,qt.tools.ifw.41 tools_qtcreator,5.0.2-0,qt.tools.qtcreator,qt.tools.
+          dir: 'C:\'
+          tools: 'tools_ifw,4.1.1,qt.tools.ifw.41;tools_qtcreator,5.0.2-0,qt.tools.qtcreator'
+          add-tools-to-path: true
+          set-env: true
 
       - name: Add Qt and MinGW to environment variable
         run: |
