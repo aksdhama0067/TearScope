@@ -1,114 +1,136 @@
-#ifndef FRAMERATEMODEL_H
-#define FRAMERATEMODEL_H
+#ifndef FRAMERATEOPTIONS_H
+#define FRAMERATEOPTIONS_H
 
-#include <QDebug>
-#include <deque>
-#include <vector>
+#include <QString>
+#include <QColor>
+#include <QFont>
+#include <memory>
 
-//! holds the framerates for all videos + framerate history
-class FramerateModel
-{
-//! constructors
-public:
-    //! saving the history for at most 1200 ticks as we restrict this in the GUI
-    FramerateModel()
-        : _max_video_count(3)
-        , _max_history_ticks(1200)
-    {
-        _init_member();
-    }
+class FramerateModel; // forward
+class ResolutionsModel; // forward
 
-//! methods
-public:
-    //! sets the framerate at the video index, removes the oldest value
-    void set_framerate_at(const quint8 index, const double value)
-    {
-        set_framerate_at(static_cast<size_t>(index), value);
-    }
-    //! sets the framerate at the video index, removes the oldest value
-    void set_framerate_at(const int index, const double value)
-    {
-        set_framerate_at(static_cast<size_t>(index), value);
-    }
-    //! sets the framerate at the video index, removes the oldest value
-    void set_framerate_at(const size_t index, const double value)
-    {
-        _framerates[index] = value;
-        _framerate_history[index].push_front(value);
-        _framerate_history[index].pop_back();
-    }
-    //! returns all current framerates for each video
-    std::vector<double> get_framerates() const
-    {
-        return _framerates;
-    }
-    //! get the current framerate for the video index
-    double get_framerate_at(const quint8 index) const
-    {
-        return get_framerate_at(static_cast<size_t>(index));
-    }
-    //! get the current framerate for the video index
-    double get_framerate_at(const int index) const
-    {
-        return get_framerate_at(static_cast<size_t>(index));
-    }
-    //! get the current framerate for the video index
-    double get_framerate_at(const size_t index) const
-    {
-        return _framerates[index];
-    }
-    //! returns the full framerate history for a video index
-    std::deque<double> get_framerate_history(const size_t index) const
-    {
-        return _framerate_history[index];
-    }
-    //! get the maximum framerate over all videos
-    double get_max_framerate_bounds() const
-    {
-        double framerate = 0;
-        for (size_t i = 0; i < _max_video_count; ++i)
-        {
-            const std::deque<double> & framerate_history = get_framerate_history(i);
-            auto result = std::max_element(framerate_history.begin(), framerate_history.end());
-            if (result == framerate_history.end())
-                qDebug() << "FramerateModel::get_max_framerate_bounds() - framerate_history is empty. This should never happen";
-            else {
-                if (framerate < *result)
-                {
-                    framerate = *result;
-                }
-            }
-        }
-        return framerate;
-    }
-    //! resets the model to the initial configuration
-    void reset_model()
-    {
-        _init_member();
-    }
-//! methods
-private:
-    //! initial configuration (nulled)
-    void _init_member()
-    {
-        _framerates.clear();
-        _framerate_history.clear();
-        for (size_t i = 0; i < _max_video_count; ++i)
-        {
-            _framerates.push_back(0.0);
-            _framerate_history.push_back(std::deque<double>(_max_history_ticks, 0.0));
-        }
-    }
+// simple container for a color pick item used in QML
+struct ColorPickItem {
+    QString _name;
+    QString _tooltip;
+    QColor  _color;
 
-private:
-    //! maximum amount of videos we can process
-    const size_t _max_video_count;
-    //! how long do we want to save the framerates
-    const size_t _max_history_ticks;
-    //! the most current framerates for each video
-    std::vector<double> _framerates;
-    //! all framerate histories, accessable by video index
-    std::vector<std::deque<double>> _framerate_history;
+    QString name() const { return _name; }
+    QString tooltip() const { return _tooltip; }
+    QColor  color() const { return _color; }
+
+    void setName(const QString &n) { _name = n; }
+    void setTooltip(const QString &t) { _tooltip = t; }
+    void setColor(const QString &c) { _color = QColor(c); }
 };
 
-#endif // FRAMERATEMODEL_H
+// simple container for pixel-difference like settings
+struct NumericOption {
+    QString _name;
+    QString _tooltip;
+    unsigned int _value{0};
+    bool _enabled{false};
+
+    QString name() const { return _name; }
+    QString tooltip() const { return _tooltip; }
+    unsigned int value() const { return _value; }
+    bool enabled() const { return _enabled; }
+
+    void setName(const QString &n) { _name = n; }
+    void setTooltip(const QString &t) { _tooltip = t; }
+    void setValue(unsigned int v) { _value = v; }
+    void setEnabled(bool e) { _enabled = e; }
+};
+
+// displayed text options container
+struct DisplayedTextOption {
+    QString _name;
+    QString _tooltip;
+    QString _value;
+    QFont   _font;
+    bool    _enabled{false};
+
+    QString name() const { return _name; }
+    QString tooltip() const { return _tooltip; }
+    QString value() const { return _value; }
+    QFont   font() const { return _font; }
+    bool    enabled() const { return _enabled; }
+
+    void setName(const QString &n) { _name = n; }
+    void setTooltip(const QString &t) { _tooltip = t; }
+    void setValue(const QString &v) { _value = v; }
+    void setFont(const QFont &f) { _font = f; }
+    void setEnabled(bool e) { _enabled = e; }
+};
+
+// relative position option (used for FPS text position)
+struct RelativePositionOption {
+    QString _name;
+    QString _tooltip;
+    double  _value{0.0};
+
+    QString name() const { return _name; }
+    QString tooltip() const { return _tooltip; }
+    double  value() const { return _value; }
+    void setValue(double v) { _value = v; }
+};
+
+// FramerateOptions aggregates the above and provides a minimal API used by the rest of the code
+class FramerateOptions {
+public:
+    FramerateOptions() = default;
+    FramerateOptions(int id, std::shared_ptr<FramerateModel> /*fm*/, std::shared_ptr<ResolutionsModel> /*rm")
+    {
+        Q_UNUSED(id);
+        // initialize sensible defaults
+        fps_plot_color._name = QString("plot_color_%1").arg(id);
+        fps_plot_color._tooltip = QString("Color for FPS plot ") + QString::number(id);
+        fps_plot_color._color = QColor("#00FF00");
+
+        pixel_difference._name = QString("pixel_diff_%1").arg(id);
+        pixel_difference._tooltip = QString("Pixel difference threshold for video ") + QString::number(id);
+        pixel_difference._value = 0;
+        pixel_difference._enabled = false;
+
+        displayed_text._name = QString("fps_text_%1").arg(id);
+        displayed_text._tooltip = QString("Displayed FPS text for video ") + QString::number(id);
+        displayed_text._value = QString("FPS");
+        displayed_text._font = QFont();
+        displayed_text._enabled = true;
+
+        displayed_text_fontsize_override = false;
+
+        rel_fps_text_x_position._name = QString("fps_x_%1").arg(id);
+        rel_fps_text_x_position._tooltip = QString("Relative X position for FPS text ") + QString::number(id);
+        rel_fps_text_x_position._value = 0.02;
+
+        rel_fps_text_y_position._name = QString("fps_y_%1").arg(id);
+        rel_fps_text_y_position._tooltip = QString("Relative Y position for FPS text ") + QString::number(id);
+        rel_fps_text_y_position._value = 0.05;
+
+        enabled = false;
+    }
+
+    void revert_to_default()
+    {
+        // simple fallback: reset enabled and numeric values
+        pixel_difference._value = 0;
+        pixel_difference._enabled = false;
+        displayed_text._value = QString("FPS");
+        displayed_text._enabled = true;
+        displayed_text_fontsize_override = false;
+        rel_fps_text_x_position._value = 0.02;
+        rel_fps_text_y_position._value = 0.05;
+    }
+
+    // members accessed by other code
+    ColorPickItem fps_plot_color;
+    NumericOption  pixel_difference;
+    DisplayedTextOption displayed_text;
+    bool enabled{false};
+    bool displayed_text_fontsize_override{false};
+    RelativePositionOption rel_fps_text_x_position;
+    RelativePositionOption rel_fps_text_y_position;
+};
+
+#endif // FRAMERATEOPTIONS_H
