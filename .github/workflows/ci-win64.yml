@@ -76,7 +76,7 @@ jobs:
       - name: List OpenCV include files
         run: |
           echo "Listing OpenCV include files..."
-          dir C:\downloads\opencv-4.5.1\build_64\install\include /s
+          Get-ChildItem -Path 'C:\downloads\opencv-4.5.1\build_64\install\include' -Recurse | Select-Object -First 200
 
       - name: Build TearScope
         run: |
