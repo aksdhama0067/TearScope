@@ -13,7 +13,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10.x'
+          python-version: '3.11.x'
 
       - name: Install Python dependencies
         run: |
@@ -55,14 +55,16 @@ jobs:
           path: C:\Qt
           key: ${{ runner.os }}-Qt-Cache
 
-      - name: Install aqtinstall and py7zr
-        run: |
-          python -m pip install --upgrade pip
-          pip install --prefer-binary aqtinstall==3.3.0 py7zr==0.19.1 pyzstd==0.19.1
-
-      - name: Download Qt (aqtinstall)
-        run: |
-          python -m aqt install-qt windows desktop ${{ env.qtver }} win64_mingw81 -O C:\Qt -E "C:\Program Files\7-Zip\7z.exe" --timeout 30
+      - name: Download Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          cache: ${{ steps.cache-qt.outputs.cache-hit }}
+          version: ${{ env.qtver }}
+          arch: win64_mingw81
+          dir: 'C:\'
+          tools: 'tools_ifw,4.1.1,qt.tools.ifw.41;tools_qtcreator,5.0.2-0,qt.tools.qtcreator'
+          add-tools-to-path: true
+          set-env: true
 
       - name: Add Qt and MinGW to environment variable
         run: |
@@ -72,9 +74,9 @@ jobs:
           echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver}" >> $env:GITHUB_ENV
           echo MinGWBin="C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
 
-      - name: Build TearScope
+      - name: Build Trdrop
         run: |
-          qmake -o Makefile TearScope\TearScope.pro -spec win32-g++ "CONFIG+=qtquickcompiler" "OBJECTS_DIR=C:\build_temp" "MOC_DIR=C:\build_temp"
+          qmake -o Makefile trdrop\trdrop.pro -spec win32-g++ "CONFIG+=qtquickcompiler" "OBJECTS_DIR=C:\build_temp" "MOC_DIR=C:\build_temp"
           mingw32-make -f Makefile.Release
 
       - name: Cleanup object files
@@ -82,7 +84,7 @@ jobs:
           cd release
           Move-Item -Force *.o, *.c, *.cpp, *.h C:\build_temp
 
-      - name: Prepare TearScope for artifact
+      - name: Prepare trdrop for artifact
         run: |
           cd $env:MinGWBin
           copy-item libgcc_s_seh-1.dll, libstdc++-6.dll, libwinpthread-1.dll, libgomp-1.dll $env:GITHUB_WORKSPACE\release
@@ -98,12 +100,12 @@ jobs:
       - name: Create Release Archive
         run: |
           cd release
-          7z a -m0=LZMA2 -mx9 ..\tearscope-release-${env:SHORT_SHA}.7z
+          7z a -m0=LZMA2 -mx9 ..\trdrop-release-${env:SHORT_SHA}.7z
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tearscope-release-${{ env.SHORT_SHA }}
+          name: trdrop-release-${{ env.SHORT_SHA }}
           path: release/*
           if-no-files-found: error
           retention-days: 90
@@ -112,4 +114,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: github.event_name != 'pull_request'
-        run: gh release create $env:SHORT_SHA "tearscope-release-$env:SHORT_SHA.7z" --target $env:GITHUB_SHA -t "TearScope Release - $env:SHORT_SHA"
+        run: gh release create $env:SHORT_SHA "trdrop-release-$env:SHORT_SHA.7z" --target $env:GITHUB_SHA -t "Trdrop Release - $env:SHORT_SHA"
