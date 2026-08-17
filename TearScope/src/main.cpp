@@ -3,6 +3,7 @@
 #include <QQuickStyle>
 #include <QQuickView>
 #include <QQmlContext>
+#include <QVariant>
 #include <QFontDatabase>
 //#include <QQmlDebuggingEnabler>
 
@@ -29,6 +30,7 @@
 #include "headers/cpp_interface/frametimemodel.h"
 #include "headers/cpp_interface/framerateplot.h"
 #include "headers/cpp_interface/frametimeplot.h"
+#include "headers/cpp_interface/framerateoptions.h"
 
 int main(int argc, char *argv[])
 {
@@ -56,38 +58,38 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileItemModel>();
     constexpr quint8 default_file_items_count = 3;
     FileItemModel file_item_model(default_file_items_count);
-    engine.rootContext()->setContextProperty("fileItemModel", &file_item_model);
+    engine.rootContext()->setContextProperty("fileItemModel", QVariant::fromValue(&file_item_model));
 
     // prepare the Tear Options Model
     qmlRegisterType<TearOptionsModel>();
     TearOptionsModel tear_options_model(shared_tear_options_list);
-    engine.rootContext()->setContextProperty("tearOptionsModel", &tear_options_model);
+    engine.rootContext()->setContextProperty("tearOptionsModel", QVariant::fromValue(&tear_options_model));
 
     // prepare the OptionsModel
     qmlRegisterType<GeneralOptionsModel>();
     std::shared_ptr<GeneralOptionsModel> shared_general_options_model(new GeneralOptionsModel());
-    engine.rootContext()->setContextProperty("generalOptionsModel", &(*shared_general_options_model));
+    engine.rootContext()->setContextProperty("generalOptionsModel", QVariant::fromValue(&(*shared_general_options_model)));
 
     // prepare ResolutionsModel (Exporter)
     qmlRegisterType<ResolutionsModel>();
     std::shared_ptr<ResolutionsModel> shared_resolution_model(new ResolutionsModel());
-    engine.rootContext()->setContextProperty("resolutionsModel", &(*shared_resolution_model));
+    engine.rootContext()->setContextProperty("resolutionsModel", QVariant::fromValue(&(*shared_resolution_model)));
 
     // prepare the FPS Options Model
     qmlRegisterType<FramerateOptionsModel>();
     FramerateOptionsModel framerate_options_model(shared_framerate_model, shared_fps_options_list, shared_resolution_model);
-    engine.rootContext()->setContextProperty("framerateOptionsModel", &framerate_options_model);
+    engine.rootContext()->setContextProperty("framerateOptionsModel", QVariant::fromValue(&framerate_options_model));
 
     // prepare ImagFormatModel (Exporter)
     qmlRegisterType<ImageFormatModel>();
     std::shared_ptr<ImageFormatModel> shared_imageformat_model(new ImageFormatModel());
-    engine.rootContext()->setContextProperty("imageFormatModel", &(*shared_imageformat_model));
+    engine.rootContext()->setContextProperty("imageFormatModel", QVariant::fromValue(&(*shared_imageformat_model)));
 
     // prepare ExportOptionsModel (Exporter)
     qmlRegisterType<ExportOptionsModel>();
     //ExportOptionsModel export_options_model;
     std::shared_ptr<ExportOptionsModel> shared_export_options_model(new ExportOptionsModel());
-    engine.rootContext()->setContextProperty("exportOptionsModel", &(*shared_export_options_model));
+    engine.rootContext()->setContextProperty("exportOptionsModel", QVariant::fromValue(&(*shared_export_options_model)));
 
     // allow cv::Mat in signals
     qRegisterMetaType<cv::Mat>("cv::Mat");
@@ -113,18 +115,18 @@ int main(int argc, char *argv[])
                                                              , shared_general_options_model));
     // qml objects
     VideoCaptureListQML videocapturelist_qml(default_file_items_count);
-    engine.rootContext()->setContextProperty("videocapturelist", &videocapturelist_qml);
+    engine.rootContext()->setContextProperty("videocapturelist", QVariant::fromValue(&videocapturelist_qml));
     FrameProcessingQML frame_processing_qml(shared_framerate_model
                                           , shared_frametime_model
                                           , shared_fps_options_list
                                           , shared_tear_options_list
                                           , shared_general_options_model
                                           , shared_tear_model);
-    engine.rootContext()->setContextProperty("frameprocessing", &frame_processing_qml);
+    engine.rootContext()->setContextProperty("frameprocessing", QVariant::fromValue(&frame_processing_qml));
     ImageConverterQML imageconverter_qml;
-    engine.rootContext()->setContextProperty("imageconverter", &imageconverter_qml);
+    engine.rootContext()->setContextProperty("imageconverter", QVariant::fromValue(&imageconverter_qml));
     ImageComposerQML imagecomposer_qml(shared_resolution_model);
-    engine.rootContext()->setContextProperty("imagecomposer", &imagecomposer_qml);
+    engine.rootContext()->setContextProperty("imagecomposer", QVariant::fromValue(&imagecomposer_qml));
     RendererQML renderer_qml(shared_fps_options_list
                            , shared_general_options_model
                            , shared_export_options_model
@@ -132,12 +134,12 @@ int main(int argc, char *argv[])
                            , shared_frametime_plot_instance
                            , shared_tear_model
                            , shared_resolution_model);
-    engine.rootContext()->setContextProperty("renderer", &renderer_qml);
+    engine.rootContext()->setContextProperty("renderer", QVariant::fromValue(&renderer_qml));
     ExporterQML exporter_qml(shared_export_options_model
                            , shared_imageformat_model
                            , shared_framerate_model
                            , shared_frametime_model);
-    engine.rootContext()->setContextProperty("exporter", &exporter_qml);
+    engine.rootContext()->setContextProperty("exporter", QVariant::fromValue(&exporter_qml));
 
     // sigals in c++ (main processing pipeline)
     // pass the QList<cv::Mat> to the converter
