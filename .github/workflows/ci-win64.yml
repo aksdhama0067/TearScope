@@ -55,16 +55,14 @@ jobs:
           path: C:\Qt
           key: ${{ runner.os }}-Qt-Cache
 
-      - name: Download Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          cache: ${{ steps.cache-qt.outputs.cache-hit }}
-          version: ${{ env.qtver }}
-          arch: win64_mingw81
-          dir: 'C:\'
-          tools: 'tools_ifw,4.1.1,qt.tools.ifw.41;tools_qtcreator,5.0.2-0,qt.tools.qtcreator'
-          add-tools-to-path: true
-          set-env: true
+      - name: Install aqtinstall and pin py7zr/pyzstd
+        run: |
+          python -m pip install --upgrade pip
+          pip install --prefer-binary aqtinstall==3.3.0 py7zr==0.19.1 pyzstd==0.19.1
+
+      - name: Download Qt (aqtinstall)
+        run: |
+          python -m aqt install-qt windows desktop ${{ env.qtver }} win64_mingw81 -O C:\Qt -E "C:\Program Files\7-Zip\7z.exe" --timeout 30
 
       - name: Add Qt and MinGW to environment variable
         run: |
