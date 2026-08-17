@@ -45,7 +45,7 @@ jobs:
           key: ${{ runner.os }}-Qt-Cache
 
       - name: Download Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4
         with:
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
           version: ${{ env.qtver }}
