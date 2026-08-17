@@ -73,6 +73,11 @@ jobs:
           echo MinGWBin="C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
           echo PATH="C:\Qt\$qtver1\mingw81_64\bin;C:\msys64\mingw64\bin;$env:PATH" >> $env:GITHUB_ENV
 
+      - name: List OpenCV include files
+        run: |
+          echo "Listing OpenCV include files..."
+          dir C:\downloads\opencv-4.5.1\build_64\install\include /s
+
       - name: Build TearScope
         run: |
           qmake -o Makefile TearScope\TearScope.pro -spec win32-g++ "CONFIG+=qtquickcompiler" "OBJECTS_DIR=C:\build_temp" "MOC_DIR=C:\build_temp"
