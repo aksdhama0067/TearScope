@@ -69,7 +69,7 @@ jobs:
           $qtver1=$env:qtver
           $opencv_ver1=${env:opencv_ver}
           echo Qt_Install="C:\Qt" >> $env:GITHUB_ENV
-          echo OpenCV_DIR="C:\downloads\opencv-${opencv_ver}" >> $env:GITHUB_ENV
+          echo OpenCV_DIR="C:\downloads\opencv-4.5.1" >> $env:GITHUB_ENV
           echo MinGWBin="C:\msys64\mingw64\bin" >> $env:GITHUB_ENV
           echo PATH="C:\Qt\$qtver1\mingw81_64\bin;C:\msys64\mingw64\bin;$env:PATH" >> $env:GITHUB_ENV
 
