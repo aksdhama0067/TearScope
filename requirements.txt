@@ -5,7 +5,7 @@
 cmake>=3.20
 ninja>=1.10.0
 
-# Python packages with pre-built wheels (avoiding compilation issues)
+# Python packages with pre-built wheels
 pyzstd>=0.16.0; python_version<'3.14'
 cffi>=0.5.0
 
