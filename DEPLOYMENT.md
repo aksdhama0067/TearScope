@@ -5,7 +5,7 @@
 #### Manual
 
 ##### Create the executable
-
+ 
 * Install [QtCreator (open-source version)](https://www.qt.io/download) and the Qt Installer Framework 3.0 (included, have to check it)
 * Build OpenCV and the application in Release mode, see detailed instructions in [Compile OpenCV (Windows) (DEVELOPMENT.md)](DEVELOPMENT.md#compile-opencv-windows)
 * Follow Running TearScope with Qt Creator in [Running TearScope with Qt Creator (Windows) (DEVELOPMENT.md)](DEVELOPMENT.md#running-tearscope-with-qt-creator-windows)
