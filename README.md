@@ -2,7 +2,7 @@
 <p align="center">
     <img height="100" src="assets/Tearscope_logo.png">
 </p>
-
+ 
 # TearScope - v1.1.1
 ###### a raw video analysis tool 
 
